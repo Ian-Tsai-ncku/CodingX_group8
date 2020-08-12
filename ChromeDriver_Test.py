@@ -7,6 +7,7 @@ Created on Mon Aug 10 22:23:55 2020
 
 from selenium import webdriver
 import time
+import csv
 
 # if putting the chromedriver in diff place, it is neccessary to imply where it is 
 chromedriver = 'D:/ChromeDriver/chromedriver.exe'
@@ -21,6 +22,7 @@ for i in range(15):
     time.sleep(1)
 htmltext = driver.page_source
 
+# get the tilte for all the contest
 from bs4 import BeautifulSoup
 soup = BeautifulSoup(htmltext,'lxml')
 info = soup.find_all('div',class_='card__content pull-left')
@@ -31,13 +33,18 @@ info = soup.find_all('div',class_='card__content pull-left')
 def Find_href(info,element):
     lists = []
     for i in info:
-        elements = i.find(element).get('href')
+        elements = i.find(element).get('href')       
         lists.append(elements)
-           
     return lists
+
 # 'a' element is usually where the links are
 link_list = Find_href(info,'a')
 
 # print out all the links(this is for checking whether getting the links)
-for i in link_list:
-    print(i)
+# for i in link_list:
+#     print(i)
+
+# save all the links as csv file
+with open('links.csv','w',newline='') as csvfile:
+    writer=csv.writer(csvfile)
+    writer.writerow(link_list)
